@@ -1,0 +1,23 @@
+{
+    "name": "hanxiaoqingcheng/rand_coupon",
+    "type": "project",
+    "description": "Coupon Tools",
+    "keywords": [
+        "coupon"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "shuying",
+            "email": "shuying@think-land.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3.0"
+    },
+    "autoload" : {
+        "psr-4":{
+            "Sy\\":"src/"
+        }
+    }
+}
