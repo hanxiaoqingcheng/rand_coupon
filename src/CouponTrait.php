@@ -2,7 +2,7 @@
 
 namespace Sy;
 
-trait Coupon
+trait CouponTrait
 {
 
     public $numericType = 1; //纯数字
