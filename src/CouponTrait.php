@@ -129,12 +129,46 @@ trait CouponTrait
             if (is_numeric($value)) {
                 $total = $total + $value;
             }
-            if(!in_array($value,['A','B','C','D','E','F','G','H','J','K','M','N','P','Q','E','S','T','U','V','W','X','Y',1,2,3,4,5,6,7,8,9,0])){
+            if (!in_array($value, [
+                'A',
+                'B',
+                'C',
+                'D',
+                'E',
+                'F',
+                'G',
+                'H',
+                'J',
+                'K',
+                'M',
+                'N',
+                'P',
+                'Q',
+                'E',
+                'S',
+                'T',
+                'U',
+                'V',
+                'W',
+                'X',
+                'Y',
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                0
+            ])
+            ) {
                 return false;
             }
         }
         $remainder = $total % 9;
-        if($remainder != 0){
+        if ($remainder != 0) {
             return false;
         }
         return true;
@@ -169,6 +203,66 @@ trait CouponTrait
         return $randStr;
     }
 
+
+    /**
+     * 加密
+     *
+     * @param $str
+     * @param string $iv
+     * @param string $password
+     * @return string
+     */
+    public function secretPassword($str, $iv = '12345678', $password = 'juhe007')
+    {
+        $str_padded = $str; //要加密的字符串
+        $code = base64_encode(openssl_encrypt($this->pkcsPadding($str_padded, 8), 'DES-CBC', $password,
+            OPENSSL_NO_PADDING, $iv));
+
+        return $code;
+
+
+    }
+
+    /**
+     * 解密
+     *
+     * @param $code
+     * @param string $iv
+     * @param string $password
+     * @return bool|string
+     */
+    public function decryptPassword($code, $iv = '12345678', $password = 'juhe007')
+    {
+        $decrypted = openssl_decrypt(base64_decode($code), 'DES-CBC', $password, OPENSSL_NO_PADDING, $iv);
+        return $this->pkcs5_unpad($decrypted);//去掉填充
+    }
+
+    /**
+     * 填充
+     *
+     * @param $str
+     * @param $blocksize
+     * @return string
+     */
+    private function pkcsPadding($str, $blocksize)
+    {
+        $pad = $blocksize - (strlen($str) % $blocksize);
+        return $str . str_repeat(chr($pad), $pad);
+    }
+
+
+    /*
+    * 对解密后的已字符填充的明文进行去掉填充字符
+    */
+    private function pkcs5_unpad($text)
+    {
+        $pad = ord($text{strlen($text) - 1});
+        if ($pad > strlen($text)) {
+            return false;
+        }
+
+        return substr($text, 0, -1 * $pad);
+    }
 
 
 }
